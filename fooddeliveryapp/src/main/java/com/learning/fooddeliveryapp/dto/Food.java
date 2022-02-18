@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Food {
 	 
 
-	@Size(max=10)
+	@Size(max=20)
 	@NotNull
 	private String foodName;
 	
@@ -26,7 +26,7 @@ public class Food {
 	private String foodCost;
 	
 	
-   private FoodType foodType;
+    private FoodType foodType;
 	
 	@Size(max=50)
 	private String description;
@@ -36,7 +36,7 @@ public class Food {
 	
 	@Id  // making regId as primary key
 	@GeneratedValue(strategy = GenerationType.AUTO) //added this for auto increment and geenration 
-	private int foodId;
+	private Long foodId;
 	
 
 }

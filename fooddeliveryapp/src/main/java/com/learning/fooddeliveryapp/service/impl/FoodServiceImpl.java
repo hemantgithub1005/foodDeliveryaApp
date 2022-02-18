@@ -7,106 +7,71 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learning.fooddeliveryapp.dto.Food;
-import com.learning.fooddeliveryapp.dto.Login;
-import com.learning.fooddeliveryapp.dto.Register;
-import com.learning.fooddeliveryapp.exception.AlreadyExistsException;
-import com.learning.fooddeliveryapp.exception.IdNotFoundException;
+import com.learning.fooddeliveryapp.dto.FoodType;
 import com.learning.fooddeliveryapp.repository.FoodRepository;
-import com.learning.fooddeliveryapp.repository.LoginRepository;
-import com.learning.fooddeliveryapp.repository.UserRepository;
 import com.learning.fooddeliveryapp.service.FoodService;
-import com.learning.fooddeliveryapp.service.LoginService;
 
 @Service
 public class FoodServiceImpl implements FoodService {
-	
-	
+
 	@Autowired
-	private FoodRepository repository;
+	private FoodRepository foodRepository;
 	
-	
-
-
 	@Override
-	@org.springframework.transaction.annotation.Transactional(rollbackFor=AlreadyExistsException.class)
-	public Food addFood(Food food) throws AlreadyExistsException {
+	public Food addFood(Food food) {
 		// TODO Auto-generated method stub
-	
-		if(repository.existsByFoodName(food.getFoodName()) == true) {
-			throw new AlreadyExistsException("food already exists");
-		}
-		
-		Food food2 = repository.save(food);
-		if(food2!=null)
-		{
+		Food food2 = foodRepository.save(food);
+		if(food2!=null) {
 			return food2;
 		}
 		else
-		{
+			return null;
+	}
+
+	@Override
+	public Optional<List<Food>> getAllFood() {
+		// TODO Auto-generated method stub
+		return Optional.ofNullable(foodRepository.findAll());
+	}
+
+	@Override
+	public Food getFoodById(Long id) {
+		// TODO Auto-generated method stub
+		Optional<Food> optional = foodRepository.findById(id);
+		if(optional.isEmpty())
+			return null;
+		else
+			return optional.get();
+	}
+
+	@Override
+	public String updateFood(Long id, Food food) {
+		// TODO Auto-generated method stub
+		if(this.foodRepository.existsById(id)==false)
+			return "fail";
+		return (this.foodRepository.save(food)!=null)?"success":"fail";
+	}
+
+	@Override
+	public String deleteFoodById(Long id) {
+		// TODO Auto-generated method stub
+		Food optional = this.getFoodById(id);
+		if(optional==null) {
 			return null;
 		}
-
-			
-		
+		else {
+			foodRepository.deleteById(id);
+			return "success";
 		}
-				
-
-
+		
+	}
+	
 	@Override
-	public String updateFood(Integer id, Food food) throws IdNotFoundException {
+	public Optional<List<Food>> getAllfoodbytypes(FoodType type) {
 		// TODO Auto-generated method stub
-		return null;
-		//we dont write here coz update is automatically taken care of
+		return foodRepository.findByFoodType(type);
 	}
 
-	@Override
-	public Food getFoodById(Integer id) throws IdNotFoundException {
-		// TODO Auto-generated method stub
-		
-	   Optional<Food>optional=repository.findById(id);
-	   if(optional.isEmpty())
-	   {
-		   throw new IdNotFoundException("id not exist");
-	   }
-	   else
-	   {
-		return optional.get() ;
-	   }
-	}
 
-	@Override
-	public Optional<List<Food>> getAllFood()
-			 {
-		// TODO Auto-generated method stub
-		List<Food> list = repository.findAll();
-		Register[] array = new Register[list.size()];
-		return Optional.ofNullable(repository.findAll());
-		
-		
-	}
 
-	@Override
-	public String deleteFoodById(Integer id) throws IdNotFoundException {
-		
-			Food optional;
-			try {
-				optional = this.getFoodById(id);
-				if(optional==null) {
-					throw new IdNotFoundException("record not found");
-				}
-				else {
-					repository.deleteById(id);
-					return "record deleted";
-				}
-			} catch (IdNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new IdNotFoundException(e.getMessage());
-			}
-		
-	}
 }
-
-
-
-

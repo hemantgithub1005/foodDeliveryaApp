@@ -15,9 +15,12 @@ spring:
     
     hibernate:
       naming:
-        physical-strategy: com.zee.zee5app.utils.CustomNamingStrategy
+        physical-strategy: com.learning.fooddeliveryapp.utils.CustomNamingStrategy
       ddl-auto: update
 server:
-  port: 9005
-  servlet:
-    context-path: /api
+  port: 9006
+  
+fooddeliveryapp:
+  app:
+    jwtSecret: secretKey
+    jwtExpirationMs: 86400000

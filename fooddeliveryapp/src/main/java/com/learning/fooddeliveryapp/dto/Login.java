@@ -32,12 +32,12 @@ public class Login
 	@NotNull
 	private String password;
 	
-	@OneToOne
-    @JsonIgnoreProperties("\"hibernateLazyInitializer\",\"handler\"")
-
-    @JsonProperty(access=Access.WRITE_ONLY)
-    @JoinColumn(name = "regId")
-	private Register register;
+//	@OneToOne
+//    @JsonIgnoreProperties("\"hibernateLazyInitializer\",\"handler\"")
+//
+//    @JsonProperty(access=Access.WRITE_ONLY)
+//    @JoinColumn(name = "Id")
+//	private User register;
 
 	
 

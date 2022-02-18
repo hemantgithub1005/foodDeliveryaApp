@@ -1,11 +1,17 @@
 package com.learning.fooddeliveryapp.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.learning.fooddeliveryapp.dto.Register;
+import com.learning.fooddeliveryapp.dto.User;
 
-public interface UserRepository extends JpaRepository<Register,Integer> {
+public interface UserRepository extends JpaRepository<User,Long> {
 
-	boolean existsByEmail(String email);
+Optional<User> findByUsername(String username);
 	
+	boolean existsByUsername(String username);
+	
+	Boolean existsByEmail(String email);
+
 }

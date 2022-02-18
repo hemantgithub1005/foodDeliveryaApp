@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learning.fooddeliveryapp.dto.Login;
-import com.learning.fooddeliveryapp.dto.Register;
+import com.learning.fooddeliveryapp.dto.User;
 import com.learning.fooddeliveryapp.exception.AlreadyExistsException;
 import com.learning.fooddeliveryapp.exception.IdNotFoundException;
 import com.learning.fooddeliveryapp.repository.LoginRepository;
@@ -31,15 +31,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@org.springframework.transaction.annotation.Transactional(rollbackFor=AlreadyExistsException.class)
-	public Register addUser(Register register) throws AlreadyExistsException {
+	public User addUser(User register) throws AlreadyExistsException {
 		// TODO Auto-generated method stub
 	
 		if(repository.existsByEmail(register.getEmail()) == true) {
 			throw new AlreadyExistsException("record already exists");
 		}
-		Register register2 = repository.save(register);
+		User register2 = repository.save(register);
 		if (register2 != null) {
-			Login login = new Login(register.getEmail(), register.getPassword(),register2);
+			Login login = new Login(register.getEmail(), register.getPassword());
 			if(loginRepository.existsByEmail(register2.getEmail())) {
 				throw new AlreadyExistsException("login already exists");
 			}
@@ -60,20 +60,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String updateUser(Integer id, Register register) throws IdNotFoundException {
-		// TODO Auto-generated method stub
-		if(this.repository.existsById(id)==false)
-		{
-			return "fail";
+	public User updateUser(Long id, User register) throws IdNotFoundException{
+		boolean status = repository.existsById(id);
+		if(!status) {
+			throw new IdNotFoundException("User with this Id does not exist");
 		}
-		return (this.repository.save(register)!=null)?"success":"fail";
-		//we dont write here coz update is automatically taken care of
+		User user = repository.getById(id);
+		user.setAddress(register.getAddress());
+		user.setEmail(register.getEmail());
+		user.setUsername(register.getUsername());
+		user.setPassword(register.getPassword());
+		User newregister = repository.save(user);
+		return newregister;
 	}
 
 	@Override
-	public Register getUserById(Integer id) throws IdNotFoundException {
+	public User getUserById(Long id) throws IdNotFoundException {
 		// TODO Auto-generated method stub
-	   Optional<Register>optional=repository.findById(id);
+	   Optional<User>optional=repository.findById(id);
 	   if(optional.isEmpty())
 	   {
 		   throw new IdNotFoundException("id not exist");
@@ -85,20 +89,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<List<Register>> getAllUsers()
+	public Optional<List<User>> getAllUsers()
 			 {
 		// TODO Auto-generated method stub
-		List<Register> list = repository.findAll();
-		Register[] array = new Register[list.size()];
+		List<User> list = repository.findAll();
+		User[] array = new User[list.size()];
 		return Optional.ofNullable(repository.findAll());
 		
 		
 	}
 
 	@Override
-	public String deleteUserById(Integer id) throws IdNotFoundException {
+	public String deleteUserById(Long id) throws IdNotFoundException {
 		
-			Register optional;
+			User optional;
 			try {
 				optional = this.getUserById(id);
 				if(optional==null) {

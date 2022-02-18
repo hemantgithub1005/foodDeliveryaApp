@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.learning.fooddeliveryapp.dto.Register;
+import com.learning.fooddeliveryapp.dto.User;
 import com.learning.fooddeliveryapp.exception.AlreadyExistsException;
 import com.learning.fooddeliveryapp.exception.IdNotFoundException;
 
@@ -14,11 +14,11 @@ import com.learning.fooddeliveryapp.exception.IdNotFoundException;
 public interface UserService 
 
 {
-	public Register addUser(Register register) throws AlreadyExistsException;
-	public String updateUser(Integer id, Register register) throws IdNotFoundException;
-	public Register getUserById(Integer id) throws IdNotFoundException ;
-	public Optional<List<Register>> getAllUsers();
-	public String deleteUserById(Integer id) throws IdNotFoundException;
+	public User addUser(User register) throws AlreadyExistsException;
+	public User updateUser(Long id, User register) throws IdNotFoundException;
+	public User getUserById(Long id) throws IdNotFoundException ;
+	public Optional<List<User>> getAllUsers();
+	public String deleteUserById(Long id) throws IdNotFoundException;
 	
 
 }

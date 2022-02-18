@@ -1,21 +1,24 @@
 package com.learning.fooddeliveryapp.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.learning.fooddeliveryapp.dto.Food;
+import com.learning.fooddeliveryapp.dto.FoodType;
 
-public interface FoodRepository extends JpaRepository<Food, Integer> {
-	
+@Repository
+public interface FoodRepository extends JpaRepository<Food, Long> 
+{
+
 	boolean existsByFoodName(String foodName);
 
-//	Optional<Food> findById(Integer id);
-
-	void deleteById(Integer id);
-
+	Optional<List<Food>> findByFoodType(FoodType type);
+	
 	
 
-	Optional<Food> findById(Integer id);
-
 }
+
+  
